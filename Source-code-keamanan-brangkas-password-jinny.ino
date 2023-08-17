@@ -19,7 +19,7 @@ byte colPins[COLS] = { A0, A1, A2, A3 }; // Connect keypad COL0, COL1, COL2, and
 // Create the Keypad
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-Password password = Password("26102001"); //Masukan Password yang diinginkan.
+Password password = Password("261001"); //Masukan Password yang diinginkan.
 
 const int buzzer = 2;
 const int relay = 8;
@@ -33,7 +33,7 @@ bool access = false;
 
 void setup() {
   Serial.begin(9600);
-  lcd.begin(16,2);
+  lcd.begin();
   lcd.backlight();
 
   keypad.addEventListener(keypadEvent); //add an event listener for this keypad
@@ -41,7 +41,6 @@ void setup() {
   pinMode(relay, OUTPUT);
   digitalWrite(relay, HIGH);
 
-  tone (buzzer, 1200);
   lcd.setCursor (0, 0);
   lcd.print(F("Brangkas Jinny"));
   lcd.setCursor (3, 1);
@@ -66,7 +65,7 @@ void loop() {
     lcd.setCursor (0, 0);
     lcd.print(F(" -Buka Brangkas- "));
     lcd.setCursor (0, 1);
-    lcd.print(F(" Masukan Password "));
+    lcd.print(F("Masukan Password"));
   }
 
   if (alarmStat == 1) {
@@ -97,7 +96,7 @@ void keypadEvent(KeypadEvent eKey) {
         lcd.clear();
       }
       lcd.setCursor (0, 0);
-      lcd.print(F("Password Entered"));
+      lcd.print(F("Masukan Password"));
       if (pwPos < 7) {
         lcd.setCursor (4 + pwPos, 1);
         lcd.print(F("*"));
@@ -110,7 +109,7 @@ void keypadEvent(KeypadEvent eKey) {
           lcd.clear();
           delay(200);
           lcd.setCursor (0, 0);
-          lcd.print(F("Password Entered"));
+          lcd.print(F("Ulangi"));
           break;
 
         default: password.append(eKey);
@@ -142,16 +141,8 @@ void checkPassword() {
 
 void diterima() {
   digitalWrite(relay, LOW);
-  tone (buzzer, 900);
-  delay(100);
-  tone (buzzer, 1200);
-  delay(100);
-  tone (buzzer, 1800);
-  delay(200);
-  noTone(buzzer);
-  delay(600);
   lcd.setCursor (0, 0);
-  lcd.print(F(" -Brangkas Terbuka- "));
+  lcd.print(F("Brangkas Terbuka"));
   lcd.setCursor (0, 1);
   lcd.print(F("Selama 3 Detik"));
   for (int i = 3; i > 0; i--) {
